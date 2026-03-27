@@ -73,22 +73,6 @@ width:100%;
 height:350px;
 }
 
-table{
-width:100%;
-border-collapse:collapse;
-}
-
-th{
-background:#FF9933;
-color:white;
-padding:8px;
-}
-
-td{
-padding:8px;
-border-bottom:1px solid #eee;
-}
-
 </style>
 
 </head>
@@ -96,8 +80,6 @@ border-bottom:1px solid #eee;
 <body>
 
 <div class="container">
-
-<!-- LOGIN -->
 
 <div id="loginPage">
 
@@ -114,8 +96,6 @@ border-bottom:1px solid #eee;
 
 </div>
 
-
-<!-- REGISTER -->
 
 <div id="registerPage" class="hidden">
 
@@ -135,8 +115,6 @@ border-bottom:1px solid #eee;
 </div>
 
 
-<!-- MENU -->
-
 <div id="menuPage" class="hidden">
 
 <div class="card">
@@ -150,8 +128,6 @@ border-bottom:1px solid #eee;
 
 </div>
 
-
-<!-- MEASURE -->
 
 <div id="measurePage" class="hidden">
 
@@ -171,8 +147,6 @@ BPM
 </div>
 
 
-<!-- GRAPH -->
-
 <div id="graphPage" class="hidden">
 
 <div class="card">
@@ -185,20 +159,18 @@ BPM
 </div>
 
 
-<!-- HISTORY -->
-
 <div id="historyPage" class="hidden">
 
 <div class="card">
 
 <h3>History</h3>
 
-<table>
+<table width="100%">
+
 <tr>
 <th>Date</th>
 <th>Time</th>
 <th>Glucose</th>
-<th>BPM</th>
 </tr>
 
 <tbody id="historyList"></tbody>
@@ -218,26 +190,26 @@ BPM
 
 <script>
 
-let users=JSON.parse(localStorage.getItem("users"))||[]
-let currentUser=""
-let history=[]
+let users = JSON.parse(localStorage.getItem("users")) || []
+let currentUser = ""
+let history = []
 
 function showRegister(){
-loginPage.classList.add("hidden")
-registerPage.classList.remove("hidden")
+document.getElementById("loginPage").classList.add("hidden")
+document.getElementById("registerPage").classList.remove("hidden")
 }
 
 function showLogin(){
-registerPage.classList.add("hidden")
-loginPage.classList.remove("hidden")
+document.getElementById("registerPage").classList.add("hidden")
+document.getElementById("loginPage").classList.remove("hidden")
 }
 
 function registerUser(){
 
 let newUser={
-username:reg_user.value,
-password:reg_pass.value,
-name:name.value
+username:document.getElementById("reg_user").value,
+password:document.getElementById("reg_pass").value,
+name:document.getElementById("name").value
 }
 
 users.push(newUser)
@@ -254,16 +226,16 @@ let found=false
 
 users.forEach(x=>{
 
-if(x.username==user.value && x.password==pass.value){
+if(x.username==document.getElementById("user").value &&
+x.password==document.getElementById("pass").value){
 
 found=true
 currentUser=x.username
 
 history=
-JSON.parse(localStorage.getItem("history_"+currentUser))
-||[]
+JSON.parse(localStorage.getItem("history_"+currentUser)) || []
 
-welcome.innerHTML="Welcome "+x.name
+document.getElementById("welcome").innerHTML="Welcome "+x.name
 
 }
 
@@ -271,8 +243,8 @@ welcome.innerHTML="Welcome "+x.name
 
 if(found){
 
-loginPage.classList.add("hidden")
-menuPage.classList.remove("hidden")
+document.getElementById("loginPage").classList.add("hidden")
+document.getElementById("menuPage").classList.remove("hidden")
 
 }else{
 
@@ -284,36 +256,36 @@ alert("Wrong login")
 
 function logout(){
 
-menuPage.classList.add("hidden")
-loginPage.classList.remove("hidden")
+document.getElementById("menuPage").classList.add("hidden")
+document.getElementById("loginPage").classList.remove("hidden")
 
 }
 
 function showMenu(){
 
-measurePage.classList.add("hidden")
-graphPage.classList.add("hidden")
-historyPage.classList.add("hidden")
+document.getElementById("measurePage").classList.add("hidden")
+document.getElementById("graphPage").classList.add("hidden")
+document.getElementById("historyPage").classList.add("hidden")
 
-menuPage.classList.remove("hidden")
+document.getElementById("menuPage").classList.remove("hidden")
 
 }
 
 function showMeasure(){
-menuPage.classList.add("hidden")
-measurePage.classList.remove("hidden")
+document.getElementById("menuPage").classList.add("hidden")
+document.getElementById("measurePage").classList.remove("hidden")
 }
 
 function showGraph(){
-menuPage.classList.add("hidden")
-graphPage.classList.remove("hidden")
+document.getElementById("menuPage").classList.add("hidden")
+document.getElementById("graphPage").classList.remove("hidden")
 drawChart()
 }
 
 function showHistory(){
 
-menuPage.classList.add("hidden")
-historyPage.classList.remove("hidden")
+document.getElementById("menuPage").classList.add("hidden")
+document.getElementById("historyPage").classList.remove("hidden")
 
 let html=""
 
@@ -324,13 +296,12 @@ html+=`
 <td>${d.date}</td>
 <td>${d.time}</td>
 <td>${d.glucose}</td>
-<td>${d.bpm}</td>
 </tr>
 `
 
 })
 
-historyList.innerHTML=html
+document.getElementById("historyList").innerHTML=html
 
 }
 
@@ -352,21 +323,15 @@ function measure(){
 let glucose=Math.floor(Math.random()*40)+90
 let bpm=Math.floor(Math.random()*30)+70
 
-glucoseEl=document.getElementById("glucose")
-bpmEl=document.getElementById("bpm")
-
-glucoseEl.innerText=glucose
-bpmEl.innerText=bpm
+document.getElementById("glucose").innerText=glucose
+document.getElementById("bpm").innerText=bpm
 
 let now=new Date()
 
 history.push({
-
 date:now.toLocaleDateString(),
 time:now.toLocaleTimeString(),
-glucose:glucose,
-bpm:bpm
-
+glucose:glucose
 })
 
 localStorage.setItem(
@@ -380,7 +345,7 @@ drawChart()
 
 function drawChart(){
 
-const canvas=chart
+const canvas=document.getElementById("chart")
 const ctx=canvas.getContext("2d")
 
 canvas.width=canvas.clientWidth
